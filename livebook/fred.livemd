@@ -1,0 +1,67 @@
+<!-- livebook:{"app_settings":{"access_type":"public","slug":"fred"}} -->
+
+# FRED
+
+```elixir
+Mix.install([
+  {:fred_client, "~> 0.1.0"},
+  {:explorer, "~> 0.6.1"},
+  {:kino_vega_lite, "~> 0.1.7"}
+])
+
+Application.put_env(:fred_client, :api_key, "api_key_here")
+```
+
+## Section
+
+```elixir
+search =
+  "Search"
+  |> Kino.Input.text()
+```
+
+```elixir
+select_frame = Kino.Frame.new()
+```
+
+```elixir
+chart_frame = Kino.Frame.new()
+```
+
+```elixir
+search_text = Kino.Input.read(search)
+
+if search_text != "" do
+  {:ok, search} = FRED.series_search(search_text)
+
+  filtered_search = Enum.map(search.seriess, fn x -> {x.id, x.title} end)
+
+  select_series = Kino.Input.select("Series", filtered_search)
+  Kino.Frame.render(select_frame, select_series)
+
+  select_stream = Kino.Control.stream(select_series)
+
+  Kino.listen(select_stream, fn event ->
+    require Explorer.DataFrame
+
+    {:ok, info} = FRED.series(event.value)
+    {:ok, data} = FRED.series_observations(event.value)
+
+    series_info = hd(info.seriess)
+
+    df = Explorer.DataFrame.new(data.observations)
+    clean_df = df |> Explorer.DataFrame.filter(value != ".")
+
+    chart =
+      VegaLite.new(title: series_info.title, width: 900, height: 600)
+      |> VegaLite.data_from_values(clean_df, only: ["date", "value"])
+      |> VegaLite.mark(:line, tooltip: true)
+      |> VegaLite.encode_field(:x, "date", type: :temporal, title: "Date")
+      |> VegaLite.encode_field(:y, "value", type: :quantitative, title: series_info.units)
+
+    Kino.Frame.render(chart_frame, chart)
+  end)
+else
+  Kino.Text.new("")
+end
+```

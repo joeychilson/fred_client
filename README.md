@@ -13,3 +13,9 @@ def deps do
   ]
 end
 ```
+
+## Configuration
+
+```elixir
+config :fred_client, :api_key, "api_key"
+```
