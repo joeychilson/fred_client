@@ -5,7 +5,6 @@ defmodule FRED do
   ## Required
 
   - `category_id` The id for a category
-
   """
   def category(category_id),
     do: get("/fred/category", Keyword.put([], :category_id, category_id))
@@ -21,7 +20,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def category_children(category_id, opts \\ []),
     do: get("/fred/category/children", Keyword.put(opts, :category_id, category_id))
@@ -37,7 +35,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def category_related(category_id, opts \\ []),
     do: get("/fred/category/related", Keyword.put(opts, :category_id, category_id))
@@ -61,7 +58,6 @@ defmodule FRED do
   - `filter_value` The value of the filter_variable attribute to filter results by.
   - `tag_names` A semicolon delimited list of tag names that series match all of.
   - `exclude_tag_names` A semicolon delimited list of tag names that series match none of.
-
   """
   def category_series(category_id, opts \\ []),
     do: get("/fred/category/series", Keyword.put(opts, :category_id, category_id))
@@ -84,7 +80,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def category_tags(category_id, opts \\ []),
     do: get("fred/category/tags", Keyword.put(opts, :category_id, category_id))
@@ -107,13 +102,14 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def category_related_tags(id, tag_names, opts \\ []) do
     params =
-      opts
-      |> Keyword.put(:category_id, id)
-      |> Keyword.put(:tag_names, tag_names)
+      Keyword.new([
+        {:category_id, id},
+        {:tag_names, tag_names}
+      ])
+      |> Keyword.merge(opts)
 
     get("/fred/category/related_tags", params)
   end
@@ -129,7 +125,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def releases(opts \\ []), do: get("/fred/releases", opts)
 
@@ -145,7 +140,6 @@ defmodule FRED do
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
   - `include_release_dates_with_no_data` Determines whether release dates with no data available are returned.
-
   """
   def releases_dates(opts \\ []), do: get("/fred/releases/dates", opts)
 
@@ -160,7 +154,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def release(release_id, opts \\ []),
     do: get("/fred/release", Keyword.put(opts, :release_id, release_id))
@@ -181,7 +174,6 @@ defmodule FRED do
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
   - `include_release_dates_with_no_data` Determines whether release dates with no data available are returned.
-
   """
   def release_dates(release_id, opts \\ []),
     do: get("/fred/release/dates", Keyword.put(opts, :release_id, release_id))
@@ -205,7 +197,6 @@ defmodule FRED do
   - `filter_value` The value of the filter_variable attribute to filter results by.
   - `tag_names` A semicolon delimited list of tag names that series match all of.
   - `exclude_tag_names` A semicolon delimited list of tag names that series match none of.
-
   """
   def release_series(release_id, opts \\ []),
     do: get("/fred/release/series", Keyword.put(opts, :release_id, release_id))
@@ -221,7 +212,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def release_sources(release_id, opts \\ []),
     do: get("/fred/release/sources", Keyword.put(opts, :release_id, release_id))
@@ -243,7 +233,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def release_tags(release_id, opts \\ []),
     do: get("/fred/release/tags", Keyword.put(opts, :release_id, release_id))
@@ -266,13 +255,14 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def release_related_tags(release_id, tag_names, opts \\ []) do
     params =
-      opts
-      |> Keyword.put_new(:release_id, release_id)
-      |> Keyword.put_new(:tag_names, tag_names)
+      Keyword.new([
+        {:release_id, release_id},
+        {:tag_names, tag_names}
+      ])
+      |> Keyword.merge(opts)
 
     get("/fred/release/related_tags", params)
   end
@@ -289,7 +279,6 @@ defmodule FRED do
   - `element_id` The id for an element
   - `include_observation_values` A flag to indicate that observations need to be returned.
   - `observation_date` The observation date to be included with the returned release table.
-
   """
   def release_tables(release_id, opts \\ []),
     do: get("/fred/release/tables", Keyword.put(opts, :release_id, release_id))
@@ -305,7 +294,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def series(series_id, opts \\ []),
     do: get("/fred/series", Keyword.put(opts, :series_id, series_id))
@@ -321,7 +309,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def series_categories(series_id, opts \\ []),
     do: get("/fred/series/categories", Keyword.put(opts, :series_id, series_id))
@@ -347,7 +334,6 @@ defmodule FRED do
   - `aggregation_method` A key that indicates the aggregation method used for frequency aggregation.
   - `output_type` An integer that indicates an output type.
   - `vintage_dates` A comma separated string of YYYY-MM-DD formatted dates in history (e.g. 2000-01-01,2005-02-24).
-
   """
   def series_observations(series_id, opts \\ []),
     do: get("/fred/series/observations", Keyword.put(opts, :series_id, series_id))
@@ -363,7 +349,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def series_release(series_id, opts \\ []),
     do: get("/fred/series/release", Keyword.put(opts, :series_id, series_id))
@@ -388,7 +373,6 @@ defmodule FRED do
   - `filter_value` The value of the filter_variable attribute to filter results by.
   - `tag_names` A semicolon delimited list of tag names to match against.
   - `exclude_tag_names` A semicolon delimited list of tag names to exclude from the returned data series.
-
   """
   def series_search(search_text, opts \\ []),
     do: get("/fred/series/search", Keyword.put(opts, :search_text, search_text))
@@ -411,7 +395,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def series_search_tags(series_search_text, opts \\ []),
     do:
@@ -436,7 +419,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def series_search_related_tags(series_search_text, opts \\ []) do
     get(
@@ -458,7 +440,6 @@ defmodule FRED do
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def series_tags(series_id, opts \\ []),
     do: get("/fred/series/tags", Keyword.put(opts, :series_id, series_id))
@@ -475,7 +456,6 @@ defmodule FRED do
   - `filter_value` Limit results by geographic type of economic data series; namely 'macro', 'regional', and 'all'.
   - `start_time` Start time for limiting results for a time range, can filter down to minutes
   - `end_time` End time for limiting results for a time range, can filter down to minutes
-
   """
   def series_updates(opts \\ []),
     do: get("/fred/series/updates", opts)
@@ -494,7 +474,6 @@ defmodule FRED do
   - `limit` The maximum number of results to return.
   - `offset` The number of results to skip
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def series_vintagedates(series_id, opts \\ []),
     do: get("/fred/series/vintagedates", Keyword.put(opts, :series_id, series_id))
@@ -510,7 +489,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def sources(opts \\ []),
     do: get("/fred/sources", opts)
@@ -526,7 +504,6 @@ defmodule FRED do
 
   - `realtime_start` The start of the real-time period. (YYYY-MM-DD)
   - `realtime_end` The end of the real-time period. (YYYY-MM-DD)
-
   """
   def source(source_id, opts \\ []),
     do: get("/fred/source", Keyword.put(opts, :source_id, source_id))
@@ -546,7 +523,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def source_releases(source_id, opts \\ []),
     do: get("/fred/source/releases", Keyword.put(opts, :source_id, source_id))
@@ -565,7 +541,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def tags(opts \\ []), do: get("/fred/tags", opts)
 
@@ -587,7 +562,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def related_tags(tag_names, opts \\ []),
     do: get("/fred/tags/related", Keyword.put(opts, :tag_names, tag_names))
@@ -608,7 +582,6 @@ defmodule FRED do
   - `offset` The number of results to skip
   - `order_by` Order results by values of the specified attribute.
   - `sort_order` Sort results is ascending or descending order for attribute values specified by order_by.
-
   """
   def tags_series(tag_names, opts \\ []),
     do: get("/fred/tags/series", Keyword.put(opts, :tag_names, tag_names))
@@ -617,9 +590,11 @@ defmodule FRED do
     api_key = Application.get_env(:fred_client, :api_key)
 
     params =
-      params
-      |> Keyword.put_new(:file_type, "json")
-      |> Keyword.put_new(:api_key, api_key)
+      Keyword.new([
+        {:file_type, "json"},
+        {:api_key, api_key}
+      ])
+      |> Keyword.merge(params)
 
     req =
       Req.new(
