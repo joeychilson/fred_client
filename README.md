@@ -9,7 +9,7 @@ An Elixir-based HTTP Client for FRED (Federal Reserve Economic Data) API
 ```elixir
 def deps do
   [
-    {:fred_client, "~> 0.1.0"}
+    {:fred_client, "~> 0.1.1"}
   ]
 end
 ```

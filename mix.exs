@@ -1,7 +1,7 @@
 defmodule FredClient.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.1"
   @description "An Elixir-based HTTP Client for FRED (Federal Reserve Economic Data) API"
 
   def project do
